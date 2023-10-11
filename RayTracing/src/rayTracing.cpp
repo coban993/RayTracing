@@ -25,6 +25,12 @@ public:
 		blueSphere.Color = { 0.2f, 0.3f, 1.0f };
 		blueSphere.Roughness = 0.1f;
 
+		Material& orangeSphere = m_Scene.Matherials.emplace_back();
+		orangeSphere.Color = {0.8f, 0.5f, 0.2f};
+		orangeSphere.Roughness = 0.1f;
+		orangeSphere.EmissionColor = orangeSphere.Color;
+		orangeSphere.EmissionPower = 2.0f;
+
 		{
 			Sphere sphere;
 			sphere.Position = { 0.0f, 0.0f, 0.0f };
@@ -39,7 +45,13 @@ public:
 			sphere.MatherialIndex = 1;
 			m_Scene.Spheres.push_back(sphere);
 		}
-
+		{
+			Sphere sphere;
+			sphere.Position = { 2.0f, 0.0f, 0.0f };
+			sphere.Radius = 1.0f;
+			sphere.MatherialIndex = 2;
+			m_Scene.Spheres.push_back(sphere);
+		}
 	}
 
 	virtual void OnUpdate(float ts) override
@@ -93,11 +105,13 @@ public:
 		for (size_t i = 0; i < m_Scene.Matherials.size(); i++)
 		{
 			ImGui::PushID(i);
-			Material& matherial = m_Scene.Matherials[i];
+			Material& material = m_Scene.Matherials[i];
 
-			ImGui::ColorEdit3("Color", glm::value_ptr(matherial.Color));
-			ImGui::DragFloat("Roughness", &matherial.Roughness, 0.05f, 0.0f, 1.0f);
-			ImGui::DragFloat("Metallic", &matherial.Metallic, 0.05f, 0.0f, 1.0f);
+			ImGui::ColorEdit3("Color", glm::value_ptr(material.Color));
+			ImGui::DragFloat("Roughness", &material.Roughness, 0.05f, 0.0f, 1.0f);
+			ImGui::DragFloat("Metallic", &material.Metallic, 0.05f, 0.0f, 1.0f);
+			ImGui::ColorEdit3("Emission Color", glm::value_ptr(material.EmissionColor));
+			ImGui::DragFloat("Emission Power", &material.EmissionPower, 0.05f, 0.0f, FLT_MAX);
 
 			ImGui::Separator();
 			ImGui::PopID();
